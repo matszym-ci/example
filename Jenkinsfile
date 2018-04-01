@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'node:6-alpine'
+      image 'node:8'
       args '-p 3000:3000 -p 5000:5000'
     }
   }
@@ -9,10 +9,11 @@ pipeline {
     CI = 'true'
   }
   stages {
-    stage('unit tests') {
+    stage('quality') {
       parallel {
         stage('unit tests') {
           steps {
+            sh 'npm install'
             sh 'npm test'
           }
         }
