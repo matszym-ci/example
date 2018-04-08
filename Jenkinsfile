@@ -1,19 +1,20 @@
 pipeline {
   agent {
-    docker {
-      image 'node:6-alpine'
+    dockerfile {
+      filename 'ci.dockerfile'
       args '-p 3000:3000 -p 5000:5000'
+      reuseNode true
     }
   }
   environment {
     CI = 'true'
   }
   stages {
-    stage('unit tests') {
+    stage('quality') {
       parallel {
         stage('unit tests') {
           steps {
-            sh 'npm test'
+            sh 'npm test -- --browser headless --single-run'
           }
         }
         stage('lint') {
